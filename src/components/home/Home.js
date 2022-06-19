@@ -106,7 +106,7 @@ async function translate(dataToTranslate) {
     var myHeaders = new Headers();
     myHeaders.append(
       "Authorization",
-      "Bearer ya29.c.b0AXv0zTOUWABIRa4mpXtQx2oRlkfz_ofyJHFSFmGbjzS5zrq9b6T3IPg0FzzTigtwdVg3KNn7ijDuHGqajblA2CkU8qZ0hiokRqf_oTJF4AbYg65YjIPIpDgKzGn0xkfei3JAWNUbLUMgEiA9aSoG4YM5Q1957yu5BBFGg6_VqgLYHWiSn8yBVTlEZANcVmA1nWU38mhRCJXC0tWGpi0IG65d3QLVeN0n6YP4cGHP"
+      "Bearer API KEY HERE"
     );
     myHeaders.append("Content-Type", "application/json");
 

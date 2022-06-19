@@ -9,31 +9,28 @@ function Login() {
   function doesUserExist(email) {
     var users = JSON.parse(localStorage.getItem("users"));
     for (var i = 0; i < users.length; i++) {
-      if (users[i].email === email) {
-        return true;
-      }
+      if (users[i].email === email) return true;
     }
     return false;
   }
   function passwordCorrect(email, password) {
     var users = JSON.parse(localStorage.getItem("users"));
     for (var i = 0; i < users.length; i++) {
-      if (users[i].email === email && users[i].password === password) {
-        return true;
-      }
+      if (users[i].email === email && users[i].password === password) return true;
     }
     return false;
   }
+  
   function handlesubmit(e) {
     e.preventDefault();
     if (doesUserExist(email)) {
       if (passwordCorrect(email, password)) {
-		localStorage.setItem("isUserLoggedIn", true);
+        localStorage.setItem("isUserLoggedIn", true);
         navigate("/");
         setCounter(0);
       } else {
         setCounter(counter + 1);
-        alert("Password is incorrect for "+ counter+ " time");
+        alert("Password is incorrect for " + counter + " time");
       }
     } else {
       alert("User does not exist");
@@ -47,9 +44,19 @@ function Login() {
           handlesubmit(e);
         }}
       >
-        Enter Email: <input onChange={(e) => setEmail(e.target.value)} type="text" name="email" />
+        Enter Email:{" "}
+        <input
+          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          name="email"
+        />
         <br />
-        Enter Password: <input onChange={(e)=>setPassword(e.target.value)} type="text" name="password" />
+        Enter Password:{" "}
+        <input
+          onChange={(e) => setPassword(e.target.value)}
+          type="text"
+          name="password"
+        />
         <br />
         <input type="submit" value="Submit" />
       </form>
