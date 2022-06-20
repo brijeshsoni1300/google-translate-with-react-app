@@ -107,9 +107,9 @@ function Home() {
       )}
 
       {/* here is a normal react player which will play video whose link is given */}
-      <div style={{margin: "5rem"}}> 
-        <ReactPlayer url="https://www.youtube.com/watch?v=HhIl_XJ-OGA" />
-      </div>
+      {/* <div style={{margin: "5rem"}}> 
+        <ReactPlayer  url="https://www.youtube.com/watch?v=HhIl_XJ-OGA" />
+      </div> */}
     </div>
   );
 

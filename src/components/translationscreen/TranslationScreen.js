@@ -19,22 +19,28 @@ function TranslationScreen() {
     }
   });
 
-  useEffect(() => {
-    var translatedDataFromLocalStorage = JSON.parse(
-      localStorage.getItem("dataTranslated")
-    );
-    for (
-      let translatedDataIterator = 0;
-      translatedDataIterator < translatedDataFromLocalStorage.length();
-      translatedDataIterator++
-    ) {
-      setDataTranslated([
-        ...dataTranslated,
-        translatedDataFromLocalStorage[translatedDataIterator],
-      ]);
-    }
-	console.log("dataTranslated");
-  }, [dataTranslated]);
+//   useEffect(() => {
+//     var translatedDataFromLocalStorage = JSON.parse(
+//       localStorage.getItem("dataTranslated")
+//     );
+	
+//     for (
+//       let translatedDataIterator = 0;
+//       translatedDataIterator < translatedDataFromLocalStorage.length;
+//       translatedDataIterator++
+//     ) {
+//       setDataTranslated([
+//         ...dataTranslated,
+//         translatedDataFromLocalStorage[translatedDataIterator],
+//       ]);
+//     }
+// 	console.log("dataTranslated");
+//   }, [dataTranslated]);
+
+  useEffect(()=>{
+	var dt = localStorage.getItem("dataTranslated");
+	setDataTranslated(dt);
+  })
 
   return (
     <div>
