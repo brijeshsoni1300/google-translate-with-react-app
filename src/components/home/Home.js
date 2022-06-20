@@ -10,7 +10,7 @@ import ReactPlayer from "react-player";
  * @returns {JSX.Element}
  * it is the home page of the application
  * it displays the video 
- * it also handles the modal
+ * it also handles the modal 
  */
 function Home() {
   var navigate = useNavigate();
@@ -92,7 +92,6 @@ function Home() {
 			  {/* when this cancle buttons is clicked it means we need to close the pop up  */}
 			  {/* here i cant figure out the way to dissable this cancle button 
 			  i.e what if it is clicked after translation button is clicked????? */}
-
               <button
                 onClick={() => {
                   setnumberOfTranslationClick(0);
