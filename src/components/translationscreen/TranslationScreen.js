@@ -10,19 +10,20 @@ function TranslationScreen() {
 		}
 	})
 
-	const [dataTranslated, setDataTranslated] = useState([]);
+	const [dataTranslated, setDataTranslated] = useState();
 
-	useEffect(() => {
-		var dt = JSON.parse(localStorage.getItem("dataTranslated"));	
-		console.log("translation screen: ", dt);
+	useEffect(  ()  => {
+		var dt = (localStorage.getItem("dataTranslated"));
 		setDataTranslated(dt);
 	}, [])
 	
-	
+	//TODO: we need to convert this string to json object and then display it
 	return (
 	<div>
 	  <h1>TranslationScreen</h1>
-	  {dataTranslated}
+	  <p>{
+		dataTranslated
+	  }</p>
 	</div>
   )
 }

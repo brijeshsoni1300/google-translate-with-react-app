@@ -17,7 +17,7 @@ function Home() {
       navigate("/login");
     }
   });
-  // start with mock apis for translation
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isApiCalled) {
@@ -25,61 +25,17 @@ function Home() {
     } else {
       console.log(godField, dimension11Field);
 
-      setTimeout(() => {
+    //   setTimeout(() => {
         dataToTranslate.push(godField);
         dataToTranslate.push(dimension11Field);
-        //	var temp = await translate(dataToTranslate);
-        setDataToTranslate([]);
-        setDataTranslated([]);
-        //	setDataTranslated(temp);
-        console.log("dataTranslated: ", dataTranslated);
-        localStorage.setItem("dataTranslated", JSON.stringify(dataTranslated));
+        await translate(dataToTranslate);
         navigate("/translation");
+		setDataToTranslate([]);
+        setDataTranslated([]);
         setCounter(0);
         setIsApiCalled(false);
-      }, 5000);
+    //   }, 5000);
     }
-  };
-
-  const CloseModal = () => {
-    // RERENDERING STUFF SHOULD BE FIXED HERE
-    return (
-      <div>
-        <form
-          onSubmit={(e) => {
-            setIsApiCalled(true);
-
-            handleSubmit(e);
-          }}
-        >
-          Discussing about GOD in interview was my worst mistake(In interview
-          Context). Do you agree
-          <input
-            value={godField}
-            onChange={(e) => {
-              setGodField(e.target.value);
-            }}
-            type="text"
-            name="godfield"
-          />{" "}
-          <br />
-          Write something about Dimension 11{" "}
-          <input
-            value={dimension11Field}
-            onChange={(e) => {
-              setDimension11Field(e.target.value);
-            }}
-            type="text"
-            name="dimension11field"
-          />{" "}
-          <br />
-          <button onClick={() => {
-			setCounter(0);
-			setShowModal(false)}}> Cancle </button>
-          <input type="submit" value="Translate"></input>
-        </form>
-      </div>
-    );
   };
 
   return (
@@ -88,53 +44,96 @@ function Home() {
       {showModal && counter}
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
-          <CloseModal key="form1" />
-          {/* <Element /> */}
+          <div>
+            <form
+              onSubmit={(e) => {
+                setIsApiCalled(true);
+                handleSubmit(e);
+              }}
+            >
+              Discussing about GOD in interview was a mistake(In interview
+              Context). Do you agree
+              <input
+                value={godField}
+                onChange={(e) => {
+                  setGodField(e.target.value);
+                }}
+                type="text"
+                name="godfield"
+              />
+              <br />
+              	Write something about Dimension 11
+              <input
+                value={dimension11Field}
+                onChange={(e) => {
+                  setDimension11Field(e.target.value);
+                }}
+                type="text"
+                name="dimension11field"
+              />
+              <br />
+              <button
+                onClick={() => {
+                  setCounter(0);
+                  setShowModal(false);
+                }}
+              >
+                Cancle
+              </button>
+              <input type="submit" value="Translate"></input>
+            </form>
+          </div>
         </Modal>
       )}
-	  <div style={{"height" : "30px", "width" : "30px"}} >
-          <ReactPlayer  url="https://www.youtube.com/watch?v=ug50zmP9I7s" />
-    </div>
+      <div >
+        <ReactPlayer url="https://www.youtube.com/watch?v=ug50zmP9I7s" />
+      </div>
+	  
     </div>
   );
+
+
+  async function translate(dataToTranslate) {
+	try {
+	  var myHeaders = new Headers();
+	  myHeaders.append("Authorization", "Bearer ya29.c.b0AXv0zTMtDBi5pa4oN0z0GHxDhmANY-LufxzuOfjBGXZtOXigNj__eAY2-9SSEu-SeKkNE2zQYdY5n2_k4_7jA3swFv4qGnebIYNSoyNJTYBrwyqHqTmncV48ZBuNKEuc-SHJW51Axy-3b4OBvepfRm4f8_TFZ5Z2wzQYUHc09JRqbR5waVhddnFmlQkOMurkVIBzZPQcjh40sMQGsJ26jWN8qCZb_aSyNCN_HIdc");
+	  myHeaders.append("Content-Type", "application/json");
+  
+	  var raw = JSON.stringify({
+		model:
+		  "projects/altus-group-maps/locations/us-central1/models/general/nmt",
+		sourceLanguageCode: "en",
+		targetLanguageCode: "fr",
+		contents: dataToTranslate,
+	  });
+  
+	  var requestOptions = {
+		method: "POST",
+		headers: myHeaders,
+		body: raw,
+	  };
+  
+	  var response = await fetch(
+		"https://translation.googleapis.com/v3/projects/altus-group-maps/locations/us-central1:translateText",
+		requestOptions
+	  );
+	  var res = await response.json();
+	  console.log("res: ", res.translations);
+	  setDataTranslated(res.translations);
+		var translatedText = []; 
+		res.translations.forEach(ele => {
+			translatedText.push(ele.translatedText)
+		});
+	  localStorage.setItem("dataTranslated", JSON.stringify(translatedText));
+	  return res["translations"];
+	} catch (error) {
+	  console.log("error");
+	  console.log(error);
+	  return [];
+	}
+  }
 }
 
 export default Home;
 
-async function translate(dataToTranslate) {
-  try {
-    var myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer API KEY HERE"
-    );
-    myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify({
-      model:
-        "projects/altus-group-maps/locations/us-central1/models/general/nmt",
-      sourceLanguageCode: "en",
-      targetLanguageCode: "fr",
-      contents: dataToTranslate,
-    });
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-    //   redirect: "follow",
-    };
-
-    var response = await fetch(
-      "https://translation.googleapis.com/v3/projects/altus-group-maps/locations/us-central1:translateText",
-      requestOptions
-    );
-    var res = await response.json();
-    console.log("res: ", res);
-    return res["translations"];
-  } catch (error) {
-    console.log("error");
-    console.log(error);
-    return [];
-  }
-}

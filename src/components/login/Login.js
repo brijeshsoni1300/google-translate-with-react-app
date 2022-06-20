@@ -20,7 +20,7 @@ function Login() {
     }
     return false;
   }
-  
+
   function handlesubmit(e) {
     e.preventDefault();
     if (doesUserExist(email)) {
@@ -44,14 +44,14 @@ function Login() {
           handlesubmit(e);
         }}
       >
-        Enter Email:{" "}
+        Enter Email:
         <input
           onChange={(e) => setEmail(e.target.value)}
           type="text"
           name="email"
         />
         <br />
-        Enter Password:{" "}
+        Enter Password:
         <input
           onChange={(e) => setPassword(e.target.value)}
           type="text"
