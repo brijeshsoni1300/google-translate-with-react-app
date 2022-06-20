@@ -96,7 +96,7 @@ function Home() {
   async function translate(dataToTranslate) {
 	try {
 	  var myHeaders = new Headers();
-	  myHeaders.append("Authorization", "Bearer ya29.c.b0AXv0zTMtDBi5pa4oN0z0GHxDhmANY-LufxzuOfjBGXZtOXigNj__eAY2-9SSEu-SeKkNE2zQYdY5n2_k4_7jA3swFv4qGnebIYNSoyNJTYBrwyqHqTmncV48ZBuNKEuc-SHJW51Axy-3b4OBvepfRm4f8_TFZ5Z2wzQYUHc09JRqbR5waVhddnFmlQkOMurkVIBzZPQcjh40sMQGsJ26jWN8qCZb_aSyNCN_HIdc");
+	  myHeaders.append("Authorization", "Bearer this is api");
 	  myHeaders.append("Content-Type", "application/json");
   
 	  var raw = JSON.stringify({
