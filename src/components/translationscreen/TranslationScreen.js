@@ -1,31 +1,46 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+/**
+ * Translation component
+ * When the conserend array is translated to respective language, it will be displayed here
+ * @returns {JSX.Element}
+ */
 
 function TranslationScreen() {
-	
-	var navigate = useNavigate();
-	useEffect(()=>{
-		if(localStorage.getItem("isUserLoggedIn")==="false"){
-			navigate("/login");
-		}
-	})
+  var navigate = useNavigate();
+  // this use effect is used here to check if the user is logged in or not
+  // if he is not logged in, he will be redirected to login page
+  const [dataTranslated, setDataTranslated] = useState();
 
-	const [dataTranslated, setDataTranslated] = useState();
+  useEffect(() => {
+    if (localStorage.getItem("isUserLoggedIn") === "false") {
+      navigate("/login");
+    }
+  });
 
-	useEffect(  ()  => {
-		var dt = (localStorage.getItem("dataTranslated"));
-		setDataTranslated(dt);
-	}, [])
-	
-	//TODO: we need to convert this string to json object and then display it
-	return (
-	<div>
-	  <h1>TranslationScreen</h1>
-	  <p>{
-		dataTranslated
-	  }</p>
-	</div>
-  )
+  useEffect(() => {
+    var translatedDataFromLocalStorage = JSON.parse(
+      localStorage.getItem("dataTranslated")
+    );
+    for (
+      let translatedDataIterator = 0;
+      translatedDataIterator < translatedDataFromLocalStorage.length();
+      translatedDataIterator++
+    ) {
+      setDataTranslated([
+        ...dataTranslated,
+        translatedDataFromLocalStorage[translatedDataIterator],
+      ]);
+    }
+  }, []);
+
+  return (
+    <div>
+      <h1>TranslationScreen</h1>
+      <p>{dataTranslated}</p>
+    </div>
+  );
 }
 
 export default TranslationScreen;

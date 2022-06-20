@@ -1,17 +1,30 @@
 import React, { useEffect, useState } from "react";
+
 import Modal from "../popup/Modal";
 import { useNavigate } from "react-router";
 import ReactPlayer from "react-player";
+
+
+/**
+ * Home component
+ * @returns {JSX.Element}
+ * it is the home page of the application
+ * it displays the video 
+ * it also handles the modal
+ */
 function Home() {
   var navigate = useNavigate();
+
+  /** A flag to show if we want to show modal or not */
   const [showModal, setShowModal] = useState(false);
   const [godField, setGodField] = useState("");
   const [dimension11Field, setDimension11Field] = useState("");
   const [dataToTranslate, setDataToTranslate] = useState([]);
-  const [dataTranslated, setDataTranslated] = useState([]);
   const [isApiCalled, setIsApiCalled] = useState(false);
   const [counter, setCounter] = useState(0);
 
+  // this use effect is used here to check if the user is logged in or not
+  // if he is not logged in, he will be redirected to login page
   useEffect(() => {
     if (localStorage.getItem("isUserLoggedIn") === "false") {
       navigate("/login");
@@ -20,21 +33,20 @@ function Home() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // if api is already called and is in request then we will increament
+    // the counter only else we will call the api
     if (isApiCalled) {
       setCounter(counter + 1);
     } else {
-      console.log(godField, dimension11Field);
-
-    //   setTimeout(() => {
-        dataToTranslate.push(godField);
-        dataToTranslate.push(dimension11Field);
-        await translate(dataToTranslate);
-        navigate("/translation");
-		setDataToTranslate([]);
-        setDataTranslated([]);
-        setCounter(0);
-        setIsApiCalled(false);
-    //   }, 5000);
+      //   setTimeout(() => {
+      dataToTranslate.push(godField);
+      dataToTranslate.push(dimension11Field);
+      await translate(dataToTranslate);
+      setDataToTranslate([]); // to empty the translation feed array  
+      setCounter(0);  // to reset the counter
+      setIsApiCalled(false); // to reset the api call flag
+      navigate("/translation"); 
+      //   }, 5000);
     }
   };
 
@@ -47,6 +59,7 @@ function Home() {
           <div>
             <form
               onSubmit={(e) => {
+                // this flag will be set to true as we are calling the api.
                 setIsApiCalled(true);
                 handleSubmit(e);
               }}
@@ -62,7 +75,7 @@ function Home() {
                 name="godfield"
               />
               <br />
-              	Write something about Dimension 11
+              Write something about Dimension 11
               <input
                 value={dimension11Field}
                 onChange={(e) => {
@@ -72,68 +85,74 @@ function Home() {
                 name="dimension11field"
               />
               <br />
+			  {/* when this cancle buttons is clicked it means we need to close the pop up  */}
+			  {/* here i cant figure out the way to dissable this cancle button 
+			  i.e what if it is clicked after translation button is clicked????? */}
+
               <button
                 onClick={() => {
                   setCounter(0);
                   setShowModal(false);
                 }}
-              >
-                Cancle
+			  >
+                	Cancle
               </button>
               <input type="submit" value="Translate"></input>
             </form>
           </div>
         </Modal>
       )}
-      <div >
-        <ReactPlayer url="https://www.youtube.com/watch?v=ug50zmP9I7s" />
+
+      {/* here is a normal react player which will play video whose link is given */}
+      <div style={{margin: "5rem"}}> 
+        <ReactPlayer url="https://www.youtube.com/watch?v=HhIl_XJ-OGA" />
       </div>
-	  
     </div>
   );
 
-
+  //   this function will be used to call the api to translate the data
+  //  this function will be called when the user clicks on the translate button for the first time
   async function translate(dataToTranslate) {
-	try {
-	  var myHeaders = new Headers();
-	  myHeaders.append("Authorization", "Bearer "+ process.env.REACT_APP_TRANSLATE_API_KEY);
-	  myHeaders.append("Content-Type", "application/json");
-  
-	  var raw = JSON.stringify({
-		model:
-		  "projects/altus-group-maps/locations/us-central1/models/general/nmt",
-		sourceLanguageCode: "en",
-		targetLanguageCode: "fr",
-		contents: dataToTranslate,
-	  });
-  
-	  var requestOptions = {
-		method: "POST",
-		headers: myHeaders,
-		body: raw,
-	  };
-  
-	  var response = await fetch(
-		"https://translation.googleapis.com/v3/projects/altus-group-maps/locations/us-central1:translateText",
-		requestOptions
-	  );
-	  var res = await response.json();
-	  console.log("res: ", res.translations);
-	  setDataTranslated(res.translations);
-		var translatedText = []; 
-		res.translations.forEach(ele => {
-			translatedText.push(ele.translatedText)
-		});
-	  localStorage.setItem("dataTranslated", JSON.stringify(translatedText));
-	  return res["translations"];
-	} catch (error) {
-	  console.log("error");
-	  console.log(error);
-	  return [];
-	}
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append(
+        "Authorization",
+        "Bearer " + process.env.REACT_APP_TRANSLATE_API_KEY
+      );
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        model:
+          "projects/altus-group-maps/locations/us-central1/models/general/nmt",
+        sourceLanguageCode: "en",
+        targetLanguageCode: "fr",
+        contents: dataToTranslate,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+      };
+
+      var response = await fetch(
+        "https://translation.googleapis.com/v3/projects/altus-group-maps/locations/us-central1:translateText",
+        requestOptions
+      );
+
+      var res = await response.json();
+      var translatedText = [];
+	  // filtering the array to extract only translated text from it
+      res.translations.forEach((ele) => {
+        translatedText.push(ele.translatedText);
+      });
+
+      // once data is translated, we will store it in local storage
+      localStorage.setItem("dataTranslated", JSON.stringify(translatedText));
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
 export default Home;
-
-
