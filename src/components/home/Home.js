@@ -17,11 +17,15 @@ function Home() {
 
   /** A flag to show if we want to show modal or not */
   const [showModal, setShowModal] = useState(false);
+	/**A field to take user input about god's quesiton */
   const [godField, setGodField] = useState("");
+  /** input about the general info on dimension11 */
   const [dimension11Field, setDimension11Field] = useState("");
+  /** this will contain array of string which are supposed to be translated */
   const [dataToTranslate, setDataToTranslate] = useState([]);
+  /** A flag to check if api is already in progress or not */
   const [isApiCalled, setIsApiCalled] = useState(false);
-  const [counter, setCounter] = useState(0);
+  const [numberOfTranslationClick, setnumberOfTranslationClick] = useState(0);
 
   // this use effect is used here to check if the user is logged in or not
   // if he is not logged in, he will be redirected to login page
@@ -34,16 +38,16 @@ function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // if api is already called and is in request then we will increament
-    // the counter only else we will call the api
+    // the numberOfTranslationClick only else we will call the api
     if (isApiCalled) {
-      setCounter(counter + 1);
+      setnumberOfTranslationClick(numberOfTranslationClick + 1);
     } else {
       //   setTimeout(() => {
       dataToTranslate.push(godField);
       dataToTranslate.push(dimension11Field);
       await translate(dataToTranslate);
       setDataToTranslate([]); // to empty the translation feed array  
-      setCounter(0);  // to reset the counter
+      setnumberOfTranslationClick(0);  // to reset the numberOfTranslationClick
       setIsApiCalled(false); // to reset the api call flag
       navigate("/translation"); 
       //   }, 5000);
@@ -53,7 +57,7 @@ function Home() {
   return (
     <div>
       <button onClick={() => setShowModal(true)}> Open Modal </button>
-      {showModal && counter}
+      {showModal && numberOfTranslationClick}
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
           <div>
@@ -91,7 +95,7 @@ function Home() {
 
               <button
                 onClick={() => {
-                  setCounter(0);
+                  setnumberOfTranslationClick(0);
                   setShowModal(false);
                 }}
 			  >

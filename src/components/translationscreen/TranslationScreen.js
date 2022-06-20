@@ -33,7 +33,8 @@ function TranslationScreen() {
         translatedDataFromLocalStorage[translatedDataIterator],
       ]);
     }
-  }, []);
+	console.log("dataTranslated");
+  }, [dataTranslated]);
 
   return (
     <div>
