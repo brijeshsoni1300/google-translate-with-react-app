@@ -96,7 +96,7 @@ function Home() {
   async function translate(dataToTranslate) {
 	try {
 	  var myHeaders = new Headers();
-	  myHeaders.append("Authorization", "Bearer this is api");
+	  myHeaders.append("Authorization", "Bearer "+ process.env.REACT_APP_TRANSLATE_API_KEY);
 	  myHeaders.append("Content-Type", "application/json");
   
 	  var raw = JSON.stringify({
